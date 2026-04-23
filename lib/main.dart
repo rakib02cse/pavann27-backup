@@ -1,0 +1,32 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:pavann27/app.dart';
+
+void main() async {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.dumpErrorToConsole(details);
+    };
+
+    configEasyLoading();
+    runApp(const MyApp());
+  }, (error, stack) {
+    debugPrint('UNCAUGHT ERROR: $error');
+    debugPrintStack(stackTrace: stack);
+  });
+}
+
+void configEasyLoading() {
+  EasyLoading.instance
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..backgroundColor = Colors.grey
+    ..textColor = Colors.white
+    ..indicatorColor = Colors.white
+    ..maskColor = Colors.green
+    ..userInteractions = false
+    ..dismissOnTap = false;
+}
