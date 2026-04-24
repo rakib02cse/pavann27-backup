@@ -66,7 +66,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            margin: EdgeInsets.only(top: 12.h, bottom: 8.h),
+            margin: EdgeInsets.only(top: 10.h, bottom: 8.h),
             width: 40.w,
             height: 4.h,
             decoration: BoxDecoration(

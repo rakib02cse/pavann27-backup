@@ -25,39 +25,46 @@ class ChatScreen extends StatelessWidget {
         ),
         title: GestureDetector(
           onTap: () => Get.to(() => ViewProfileScreen()),
-          child: Obx(() => Row(
-                children: [
-                  CircleAvatar(
-                    radius: 20.r,
-                    backgroundImage: NetworkImage(controller.user.value.profileImageUrl),
+          child: Obx(
+            () => Row(
+              children: [
+                CircleAvatar(
+                  radius: 20.r,
+                  backgroundImage: NetworkImage(
+                    controller.user.value.profileImageUrl,
                   ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                controller.user.value.name,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              controller.user.value.name,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            if (controller.user.value.isVerified)
-                              Padding(
-                                padding: EdgeInsets.only(left: 4.w),
-                                child: Icon(Icons.verified, color: Colors.blue, size: 16.sp),
+                          ),
+                          if (controller.user.value.isVerified)
+                            Padding(
+                              padding: EdgeInsets.only(left: 4.w),
+                              child: Icon(
+                                Icons.verified,
+                                color: Colors.blue,
+                                size: 16.sp,
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
+                      ),
                       Row(
                         children: [
                           Container(
@@ -72,7 +79,9 @@ class ChatScreen extends StatelessWidget {
                           ),
                           SizedBox(width: 6.w),
                           Text(
-                            controller.user.value.isOnline ? "Online" : "Offline",
+                            controller.user.value.isOnline
+                                ? "Online"
+                                : "Offline",
                             style: TextStyle(
                               color: controller.user.value.isOnline
                                   ? Colors.green
@@ -85,8 +94,9 @@ class ChatScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                ],
-              )),
+              ],
+            ),
+          ),
         ),
         actions: [
           IconButton(
@@ -101,7 +111,7 @@ class ChatScreen extends StatelessWidget {
             icon: const Icon(Icons.videocam, color: Colors.purple),
             onPressed: () => Get.to(() => VideoCallScreen()),
           ),
-          
+
           IconButton(
             icon: const Icon(Icons.more_vert, color: Colors.purple),
             onPressed: () {},
@@ -122,50 +132,61 @@ class ChatScreen extends StatelessWidget {
                   // Big Profile Picture
                   GestureDetector(
                     onTap: () => Get.to(() => ViewProfileScreen()),
-                    child: Obx(() => CircleAvatar(
-                          radius: 85.r,
-                          backgroundImage: NetworkImage(controller.user.value.profileImageUrl),
-                        )),
+                    child: Obx(
+                      () => CircleAvatar(
+                        radius: 85.r,
+                        backgroundImage: NetworkImage(
+                          controller.user.value.profileImageUrl,
+                        ),
+                      ),
+                    ),
                   ),
 
                   SizedBox(height: 16.h),
 
                   // Name
-                  Obx(() => Text(
-                        controller.user.value.name,
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
+                  Obx(
+                    () => Text(
+                      controller.user.value.name,
+                      style: TextStyle(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
 
                   SizedBox(height: 4.h),
 
                   // Online Status
-                  Obx(() => Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 9.w,
-                            height: 9.w,
-                            decoration: BoxDecoration(
-                              color: controller.user.value.isOnline
-                                  ? Colors.green
-                                  : Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 9.w,
+                          height: 9.w,
+                          decoration: BoxDecoration(
+                            color: controller.user.value.isOnline
+                                ? Colors.green
+                                : Colors.grey,
+                            shape: BoxShape.circle,
                           ),
-                          SizedBox(width: 8.w),
-                          Text(
-                            controller.user.value.isOnline ? "Online now" : "Offline",
-                            style: TextStyle(
-                                color: controller.user.value.isOnline
-                                    ? Colors.green
-                                    : Colors.grey,
-                                fontSize: 15.sp),
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          controller.user.value.isOnline
+                              ? "Online now"
+                              : "Offline",
+                          style: TextStyle(
+                            color: controller.user.value.isOnline
+                                ? Colors.green
+                                : Colors.grey,
+                            fontSize: 15.sp,
                           ),
-                        ],
-                      )),
+                        ),
+                      ],
+                    ),
+                  ),
 
                   SizedBox(height: 30.h),
 
@@ -194,15 +215,17 @@ class ChatScreen extends StatelessWidget {
                   // Bio
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Obx(() => Text(
-                          controller.user.value.bio,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 15.5,
-                            height: 1.5,
-                            color: Colors.black87,
-                          ),
-                        )),
+                    child: Obx(
+                      () => Text(
+                        controller.user.value.bio,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 15.5,
+                          height: 1.5,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
                   ),
 
                   const SizedBox(height: 100), // Extra space for input field
@@ -242,10 +265,7 @@ class ChatScreen extends StatelessWidget {
                     color: const Color(0xFF6C30ED),
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  child: const Icon(
-                    Icons.send,
-                    color: Colors.white,
-                  ),
+                  child: const Icon(Icons.send, color: Colors.white),
                 ),
               ],
             ),

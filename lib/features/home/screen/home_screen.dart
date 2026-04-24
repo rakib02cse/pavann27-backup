@@ -69,7 +69,7 @@ class HomePageScreen extends StatelessWidget {
                               () => ChatScreen(),
                               arguments: {
                                 'id': ally
-                                    .name, // Using name as ID if ID is missing in model
+                                    .name, 
                                 'name': ally.name,
                                 'image': ally.image,
                                 'isVerified': ally.isVerified,
@@ -94,9 +94,6 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-  // ─────────────────────────────────────────────
-  //  TOP BAR
-  // ─────────────────────────────────────────────
   Widget _buildTopBar() {
     return Row(
       children: [
@@ -129,9 +126,7 @@ class HomePageScreen extends StatelessWidget {
         SizedBox(width: 16.w),
         GestureDetector(
           onTap: () {
-            // Check balance: Show dialog if low, or go to TopupScreen directly.
             if (45 < 50) {
-              // Using 45 as a placeholder for the current balance
               Get.dialog(const LowBalanceDialog(), barrierDismissible: true);
             } else {
               Get.to(() => TopupScreen());
@@ -166,9 +161,6 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-  // ─────────────────────────────────────────────
-  //  STORY SECTION
-  // ─────────────────────────────────────────────
   Widget _buildStorySection() {
     return SizedBox(
       height: 90.h,
@@ -224,9 +216,6 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-  // ─────────────────────────────────────────────
-  //  RECENT SECTION
-  // ─────────────────────────────────────────────
   Widget _buildRecentSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,10 +303,6 @@ class HomePageScreen extends StatelessWidget {
       ],
     );
   }
-
-  // ─────────────────────────────────────────────
-  //  SEARCH BAR
-  // ─────────────────────────────────────────────
   Widget _buildSearchBar() {
     return Row(
       children: [
