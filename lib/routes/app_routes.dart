@@ -7,8 +7,6 @@ import 'package:pavann27/features/otp/screen/otp_screen.dart';
 import 'package:pavann27/features/success/screen/success_screen.dart';
 import 'package:pavann27/features/topup/screen/topup_screen.dart';
 
-/// Centralized routing configuration for the application
-/// Defines all app routes and their corresponding screens
 class AppRoute {
   /// Route name constants
   static const String splashScreen = '/';
@@ -19,8 +17,8 @@ class AppRoute {
   static const String notifications = '/notifications'; // Added notifications route
   static const String topup = '/topup'; // Added topup route
 
-  /// All available routes in the application
-  /// Add new routes here for any new screens
+
+
   static List<GetPage> routes = [
     GetPage(
       name: splashScreen,

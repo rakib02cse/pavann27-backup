@@ -20,7 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Add your illustration paths here
   final List<String> illustrations = [
-    Iconpath.loginLogo, // First illustration// Second illustration (can be replaced with a distinct one if available)
+    Iconpath
+        .loginLogo, // First illustration// Second illustration (can be replaced with a distinct one if available)
     Iconpath.loginLogo2, // Third illustration
   ];
 
@@ -157,10 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 Text(
                   "We use your number to verify your account",
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.black54,
-                  ),
+                  style: TextStyle(fontSize: 14.sp, color: Colors.black54),
                 ),
 
                 SizedBox(height: 30.h),
@@ -234,39 +232,42 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 20.h),
 
                 // Continue Button
-                Obx(() => SizedBox(
-                      width: double.infinity,
-                      height: 42.h,
-                      child: ElevatedButton(
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : () => controller.continueAnonymously(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF7C4DFF),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          elevation: 0,
-                          padding: EdgeInsets.zero,
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    height: 42.h,
+                    child: ElevatedButton(
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : () => controller.continueAnonymously(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF7C4DFF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.r),
                         ),
-                        child: controller.isLoading.value
-                            ? SizedBox(
-                                height: 24.h,
-                                width: 24.h,
-                                child: const CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2.5,
-                                ))
-                            : Text(
-                                "Continue",
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
+                        elevation: 0,
+                        padding: EdgeInsets.zero,
                       ),
-                    )),
+                      child: controller.isLoading.value
+                          ? SizedBox(
+                              height: 24.h,
+                              width: 24.h,
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : Text(
+                              "Continue",
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
 
                 SizedBox(height: 40.h),
               ],

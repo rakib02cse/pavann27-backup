@@ -28,262 +28,251 @@ class AllyCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        width: 360.w,
-        constraints: BoxConstraints(minHeight: 182.h),
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+        width: double.infinity,
+        padding: EdgeInsets.all(14.w),
         decoration: BoxDecoration(
-          color: isHighlighted
-              ? AppColors.lightPurple.withOpacity(0.35)
-              : AppColors.cardColor,
-          borderRadius: BorderRadius.circular(24.r),
-          border: isHighlighted
-              ? Border.all(color: AppColors.primaryColor, width: 1.4)
-              : Border.all(color: Colors.transparent, width: 1.4),
-          boxShadow: isHighlighted
-              ? [
-                  BoxShadow(
-                    color: AppColors.primaryColor.withOpacity(0.12),
-                    blurRadius: 14,
-                    offset: const Offset(0, 6),
-                  ),
-                ]
-              : [],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(2.5.w),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: ally.canTalkNow
-                          ? AppColors.primaryColor
-                          : Colors.grey,
-                      width: 2,
-                    ),
-                  ),
-                  child: CircleAvatar(
-                    radius: 24.r,
-                    backgroundImage: ally.image.startsWith('http')
-                        ? NetworkImage(ally.image)
-                        : AssetImage(ally.image) as ImageProvider,
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: 2.h,
-                  child: Container(
-                    height: 16.w,
-                    width: 16.w,
-                    decoration: BoxDecoration(
-                      color: controller.getStatusColor(ally.status),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                  ),
-                ),
-              ],
+          color: isHighlighted ? const Color(0xFFF3EFFE) : AppColors.cardColor,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: isHighlighted ? AppColors.primaryColor : Colors.transparent,
+            width: 1.4,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-            SizedBox(width: 18.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          ally.name,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textColor,
-                          ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(2.w),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: ally.canTalkNow
+                              ? AppColors.primaryColor
+                              : Colors.grey[300]!,
+                          width: 2,
                         ),
                       ),
-                      if (ally.isVerified) ...[
-                        SizedBox(width: 6.w),
-                        Container(
-                          height: 20.w,
-                          width: 20.w,
-                          decoration: const BoxDecoration(
-                            color: AppColors.lightPurple,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.verified,
-                            size: 14.sp,
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  SizedBox(height: 1.h),
-                  Text(
-                    '${ally.age} y',
-                    style: TextStyle(
-                      color: AppColors.subTextColor,
-                      fontSize: 12.sp,
+                      child: CircleAvatar(
+                        radius: 28.r,
+                        backgroundImage: ally.image.startsWith('http')
+                            ? NetworkImage(ally.image)
+                            : AssetImage(ally.image) as ImageProvider,
+                        backgroundColor: AppColors.lightPurple,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Row(
-                    children: [
-                      Container(
-                        height: 8.w,
-                        width: 8.w,
+                    Positioned(
+                      right: 1.w,
+                      bottom: 1.h,
+                      child: Container(
+                        width: 13.w,
+                        height: 13.w,
                         decoration: BoxDecoration(
                           color: controller.getStatusColor(ally.status),
                           shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
                         ),
                       ),
-                      SizedBox(width: 8.w),
-                      Flexible(
-                        child: Text(
-                          ally.status,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: controller.getStatusColor(ally.status),
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    '${ally.rating} (${ally.reviews}) · ${ally.hours}+ hrs',
-                    style: TextStyle(
-                      color: AppColors.textColor,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
                     ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    ally.bio,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: const Color(0xFF6F6F75),
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      height: 1.5,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: 14.w),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ally.canTalkNow
-                    ? GestureDetector(
-                        onTap: () {
-                          // Ensure the card is selected before initiating the action.
-                          // This prevents toggling it off if it's already selected.
-                          if (!isHighlighted) {
-                            onCardTap();
-                          }
-                          onTalkTap();
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20.w,
-                            vertical: 14.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(16.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color:
-                                    AppColors.primaryColor.withOpacity(0.25),
-                                blurRadius: 12,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            'Talk now',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15.sp,
-                            ),
-                          ),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          // Ensure the card is selected when tapping the action.
-                          // This is more intuitive than toggling.
-                          if (!isHighlighted) {
-                            onCardTap();
-                          }
-                          // NOTE: Notify-specific logic could be added here.
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20.w,
-                            vertical: 14.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF3F3F5),
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.notifications_none_rounded,
-                                size: 18.sp,
+                  ],
+                ),
+
+                SizedBox(width: 12.w),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Name + verified
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              ally.name,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w700,
                                 color: AppColors.textColor,
                               ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Notify',
-                                style: TextStyle(
-                                  color: AppColors.textColor,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15.sp,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          if (ally.isVerified) ...[
+                            SizedBox(width: 5.w),
+                            Container(
+                              height: 18.w,
+                              width: 18.w,
+                              decoration: const BoxDecoration(
+                                color: AppColors.lightPurple,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.verified,
+                                size: 12.sp,
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                if (ally.estimatedTime != null) ...[
-                  SizedBox(height: 14.h),
-                  Row(
-                    children: [
-                      Container(
-                        height: 8.w,
-                        width: 8.w,
-                        decoration: const BoxDecoration(
-                          color: Colors.orange,
-                          shape: BoxShape.circle,
-                        ),
+
+                      SizedBox(height: 3.h),
+
+                      // Status dot + label
+                      Row(
+                        children: [
+                          Container(
+                            width: 7.w,
+                            height: 7.w,
+                            decoration: BoxDecoration(
+                              color: controller.getStatusColor(ally.status),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(width: 5.w),
+                          Text(
+                            ally.status,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: controller.getStatusColor(ally.status),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 6.w),
+
+                      SizedBox(height: 3.h),
+
+                      // Rating · hours
                       Text(
-                        ally.estimatedTime!,
+                        '${ally.rating} (${ally.reviews}) · ${ally.hours}+ hrs',
                         style: TextStyle(
-                          color: Colors.orange,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13.sp,
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textColor,
                         ),
                       ),
                     ],
                   ),
-                ],
+                ),
+
+                SizedBox(width: 10.w),
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Talk now / Notify
+                    ally.canTalkNow
+                        ? GestureDetector(
+                            onTap: onTalkTap,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 10.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF6C30ED),
+                                borderRadius: BorderRadius.circular(14.r),
+                              ),
+                              child: Text(
+                                'Talk now',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13.sp,
+                                ),
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 10.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF3F3F5),
+                                borderRadius: BorderRadius.circular(14.r),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.notifications_none_rounded,
+                                    size: 15.sp,
+                                    color: AppColors.textColor,
+                                  ),
+                                  SizedBox(width: 5.w),
+                                  Text(
+                                    'Notify',
+                                    style: TextStyle(
+                                      color: AppColors.textColor,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 13.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                    // Estimated wait time
+                    if (ally.estimatedTime != null) ...[
+                      SizedBox(height: 8.h),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 7.w,
+                            height: 7.w,
+                            decoration: const BoxDecoration(
+                              color: Colors.orange,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Text(
+                            ally.estimatedTime!,
+                            style: TextStyle(
+                              color: Colors.orange,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 11.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
               ],
+            ),
+            SizedBox(height: 8.h),
+            RichText(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              text: TextSpan(
+                text: ally.bio,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFF6F6F75),
+                  height: 1.45,
+                ),
+              ),
             ),
           ],
         ),

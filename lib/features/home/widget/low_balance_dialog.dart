@@ -18,8 +18,24 @@ class LowBalanceDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              width: 56.w,
+              height: 56.w,
+              decoration: const BoxDecoration(
+                color: Color(0xFFEDE9FE),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.account_balance_wallet_outlined,
+                color: AppColors.primaryColor,
+                size: 26.sp,
+              ),
+            ),
+
+            SizedBox(height: 16.h),
+
             Text(
-              'Running low ?',
+              'Running low?',
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
@@ -28,7 +44,7 @@ class LowBalanceDialog extends StatelessWidget {
             ),
             SizedBox(height: 12.h),
             Text(
-              'add funds to keep chatting without interruptions',
+              'Add funds to keep chatting without interruptions',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14.sp,
@@ -46,7 +62,7 @@ class LowBalanceDialog extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             CustomButton(
-              text: 'not now',
+              text: 'Not now',
               backgroundColor: Colors.transparent,
               textColor: const Color(0xFF727272),
               onPressed: () => Get.back(),

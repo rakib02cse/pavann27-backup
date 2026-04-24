@@ -72,17 +72,19 @@ class BottomNavbarScreen extends StatelessWidget {
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeInOut,
                       width: 80.h,
-                      height: 36.h,
+                      height: 36,
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? AppColors.primaryColor
+                            ? Color(0xFF6C30ED)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(50.r),
                       ),
                       child: Icon(
                         controller.icons[index],
                         size: 20.sp,
-                        color: isSelected ? Colors.white : const Color(0xFF1C1C1E),
+                        color: isSelected
+                            ? Colors.white
+                            : const Color(0xFF1C1C1E),
                       ),
                     ),
                   ),
