@@ -20,7 +20,7 @@ class LowBalanceDialog extends StatelessWidget {
           children: [
             Container(
               width: 56.w,
-              height: 56.w,
+              height: 50.h,
               decoration: const BoxDecoration(
                 color: Color(0xFFEDE9FE),
                 shape: BoxShape.circle,
