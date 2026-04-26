@@ -1,23 +1,24 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pavann27/app.dart';
 
-void main() async {
-  runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
 
-    FlutterError.onError = (FlutterErrorDetails details) {
-      FlutterError.dumpErrorToConsole(details);
-    };
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.dumpErrorToConsole(details);
+  };
 
-    configEasyLoading();
-    runApp(const MyApp());
-  }, (error, stack) {
-    debugPrint('UNCAUGHT ERROR: $error');
+  PlatformDispatcher.instance.onError = (error, stack) {
+    debugPrint('ASYNCHRONOUS ERROR: $error');
     debugPrintStack(stackTrace: stack);
-  });
+    return true;
+  };
+
+  configEasyLoading();
+  runApp(const MyApp());
 }
 
 void configEasyLoading() {
