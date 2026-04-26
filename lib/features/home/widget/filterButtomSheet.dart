@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -27,7 +26,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   String _availability = 'All';
 
   static const List<String> _genders = ['Any', 'Female', 'Male'];
-  static const List<String> _ageRanges = ['All', '20-25', '25-30', '30-35', '35+'];
+  static const List<String> _ageRanges = [
+    'All',
+    '20-25',
+    '25-30',
+    '30-35',
+    '35+',
+  ];
   static const List<String> _availabilities = ['All', 'Online', 'Available'];
 
   Color _dotColor(String label) {
@@ -35,7 +40,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     if (label == 'Available') return Colors.orange;
     return Colors.transparent;
   }
-
 
   Widget _section({required String title, required Widget child}) {
     return Column(
@@ -49,7 +53,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             color: AppColors.textColor,
           ),
         ),
-        SizedBox(height: 14.h),
+        SizedBox(height: 8.h),
         child,
       ],
     );
@@ -77,7 +81,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
           // ── Title ────────────────────────────────────
           Padding(
-            padding: EdgeInsets.only(bottom: 24.h),
+            padding: EdgeInsets.only(bottom: 16.h),
             child: Text(
               'Filters',
               style: TextStyle(
@@ -111,9 +115,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               curve: Curves.easeInOut,
-                              height: 40.h,
+                              height: 34.h,
                               decoration: BoxDecoration(
-                                color: selected ? Colors.white : Colors.transparent,
+                                color: selected
+                                    ? Colors.white
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10.r),
                                 border: selected
                                     ? Border.all(
@@ -141,7 +147,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                 ),
 
-                SizedBox(height: 32.h),
+                SizedBox(height: 20.h),
                 _section(
                   title: 'Age range',
                   child: Container(
@@ -160,9 +166,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               curve: Curves.easeInOut,
-                              height: 40.h,
+                              height: 34.h,
                               decoration: BoxDecoration(
-                                color: selected ? Colors.white : Colors.transparent,
+                                color: selected
+                                    ? Colors.white
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10.r),
                                 border: selected
                                     ? Border.all(
@@ -190,7 +198,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                 ),
 
-                SizedBox(height: 32.h),
+                SizedBox(height: 20.h),
                 _section(
                   title: 'Availability',
                   child: Container(
@@ -210,9 +218,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               curve: Curves.easeInOut,
-                              height: 40.h,
+                              height: 34.h,
                               decoration: BoxDecoration(
-                                color: selected ? Colors.white : Colors.transparent,
+                                color: selected
+                                    ? Colors.white
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10.r),
                                 border: selected
                                     ? Border.all(
@@ -256,10 +266,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                 ),
 
-                SizedBox(height: 50.h),
+                SizedBox(height: 30.h),
                 SizedBox(
                   width: double.infinity,
-                  height: 54.h,
+                  height: 48.h,
                   child: ElevatedButton(
                     onPressed: () {
                       Get.back(); // Closes the bottom sheet
@@ -273,7 +283,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         borderRadius: BorderRadius.circular(16.r),
                       ),
                     ),
-                     child: Text(
+                    child: Text(
                       'Show allies',
                       style: TextStyle(
                         fontSize: 14.sp,
@@ -285,13 +295,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   ),
                 ),
 
-                SizedBox(height: 66.h),
+                SizedBox(height: 30.h),
               ],
             ),
           ),
         ],
       ),
     );
-  
   }
 }

@@ -38,8 +38,8 @@ class BottomNavbarScreen extends StatelessWidget {
     return Obx(
       () => SafeArea(
         child: Container(
-          height: 68.h,
-          margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 12.h),
+          height: 48.h,
+          margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 20.h),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(34.r),

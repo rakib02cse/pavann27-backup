@@ -178,54 +178,59 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text("🇮🇳", style: TextStyle(fontSize: 20.sp)),
-                            SizedBox(width: 6.w),
-                            Text(
-                              "+91",
-                              style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
+                  child: TextField(
+                    controller: controller.phoneController,
+                    keyboardType: TextInputType.phone,
+                    textAlignVertical: TextAlignVertical.center,
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: "Phone Number",
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade400,
+                        fontSize: 15.sp,
+                      ),
+                      prefixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(width: 12.w),
+                          Container(
+                            width: 26.w,
+                            height: 26.w,
+                            alignment: Alignment.center,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              shape: BoxShape.circle,
                             ),
-                          ],
-                        ),
-                      ),
-                      VerticalDivider(
-                        color: Colors.grey.shade300,
-                        thickness: 1,
-                        indent: 10.h,
-                        endIndent: 10.h,
-                        width: 1,
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: controller.phoneController,
-                          keyboardType: TextInputType.phone,
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w500,
+                            child: Text(
+                              "🇮🇳",
+                              style: TextStyle(fontSize: 22.sp),
+                            ),
                           ),
-                          decoration: InputDecoration(
-                            hintText: "Phone Number",
-                            hintStyle: TextStyle(
-                              color: Colors.grey.shade400,
+                          SizedBox(width: 6.w),
+                          Text(
+                            "+91",
+                            style: TextStyle(
                               fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
                             ),
-                            border: InputBorder.none,
-                            isCollapsed: true,
                           ),
-                        ),
+                          SizedBox(width: 12.w),
+                          Container(
+                            height: 18.h,
+                            width: 1,
+                            color: Colors.grey.shade300,
+                          ),
+                          SizedBox(width: 12.w),
+                        ],
                       ),
-                    ],
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                    ),
                   ),
                 ),
 
