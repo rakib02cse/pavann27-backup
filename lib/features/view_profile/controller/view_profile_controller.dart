@@ -104,6 +104,11 @@ class ViewProfileController extends GetxController {
     // TODO: Get.toNamed('/video-call', arguments: profile.value);
   }
 
+  // ── Action: notify user ──────────────────────────────────────────────────────
+  void notifyUser() {
+    // TODO: Send notification to user
+  }
+
   // ── Status helpers ────────────────────────────────────────────────────────────
   String statusLabel(AllyOnlineStatus s) {
     switch (s) {

@@ -18,7 +18,7 @@ class ViewProfileScreen extends StatelessWidget {
         5,
         (i) => Icon(
           i < count ? Icons.star_rounded : Icons.star_outline_rounded,
-          color: const Color(0xFFFFC107),
+          color: const Color(0xFFF59E0B),
           size: size.sp,
         ),
       ),
@@ -46,7 +46,7 @@ class ViewProfileScreen extends StatelessWidget {
           ),
           SizedBox(width: 6.w),
           Icon(Icons.star_rounded,
-              color: const Color(0xFFFFC107), size: 14.sp),
+              color: const Color(0xFFF59E0B), size: 14.sp),
           SizedBox(width: 10.w),
           // Bar
           Expanded(
@@ -57,7 +57,7 @@ class ViewProfileScreen extends StatelessWidget {
                 minHeight: 8.h,
                 backgroundColor: Colors.grey[200],
                 valueColor: const AlwaysStoppedAnimation<Color>(
-                  Color(0xFFFFC107),
+                  Color(0xFFF59E0B),
                 ),
               ),
             ),
@@ -125,7 +125,7 @@ class ViewProfileScreen extends StatelessWidget {
             r.text,
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textColor,
+              color: Color(0xFF727272),
               height: 1.55,
             ),
           ),
@@ -194,6 +194,11 @@ class ViewProfileScreen extends StatelessWidget {
               icon: Icons.videocam_outlined,
               onTap: controller.startVideoCall,
             ),
+            SizedBox(height: 12.h),
+            _fab(
+              icon: Icons.notifications_outlined,
+              onTap: controller.notifyUser,
+            ),
           ],
         ),
         body: SafeArea(
@@ -221,6 +226,48 @@ class ViewProfileScreen extends StatelessWidget {
                           fontWeight: FontWeight.w800,
                           color: AppColors.textColor,
                           letterSpacing: -0.3,
+                        ),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => BlockUserDialog(userName: p.name),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8.w),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE6E8EB),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.share_outlined,
+                            size: 20.sp,
+                            color: AppColors.textColor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => BlockUserDialog(userName: p.name),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(4.w),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE6E8EB),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.security_outlined,
+                            size: 20.sp,
+                            color: AppColors.textColor,
+                          ),
                         ),
                       ),
                     ],
@@ -330,7 +377,7 @@ class ViewProfileScreen extends StatelessWidget {
                           Text(
                             p.rating.toString(),
                             style: TextStyle(
-                              fontSize: 26.sp,
+                              fontSize: 12.sp,
                               fontWeight: FontWeight.w800,
                               color: AppColors.textColor,
                             ),
@@ -339,7 +386,7 @@ class ViewProfileScreen extends StatelessWidget {
                           Text(
                             '·  ${p.totalHours}+ hrs',
                             style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 12.sp,
                               color: AppColors.subTextColor,
                             ),
                           ),
@@ -349,7 +396,7 @@ class ViewProfileScreen extends StatelessWidget {
                       Text(
                         'Based on ${p.reviewCount} reviews',
                         style: TextStyle(
-                          fontSize: 13.sp,
+                          fontSize: 12.sp,
                           color: AppColors.subTextColor,
                         ),
                       ),
@@ -421,7 +468,7 @@ class ViewProfileScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? AppColors.lightPurple
-                                    : const Color(0xFFF3F3F5),
+                                    : const Color(0xFFFFFFFF),
                                 borderRadius: BorderRadius.circular(50.r),
                                 border: Border.all(
                                   color: isSelected
@@ -528,7 +575,6 @@ class ViewProfileScreen extends StatelessWidget {
 
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
-              // ── Rating breakdown chart ─────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -553,7 +599,6 @@ class ViewProfileScreen extends StatelessWidget {
 
               SliverToBoxAdapter(child: SizedBox(height: 24.h)),
 
-              // ── Reviews header ────────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -571,7 +616,6 @@ class ViewProfileScreen extends StatelessWidget {
 
               SliverToBoxAdapter(child: SizedBox(height: 14.h)),
 
-              // ── Review cards ──────────────────────────────────────────────────
               SliverPadding(
                 padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 100.h),
                 sliver: SliverList(
@@ -589,5 +633,108 @@ class ViewProfileScreen extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+
+
+
+class BlockUserDialog extends StatelessWidget {
+  final String userName;
+
+  const BlockUserDialog({super.key, required this.userName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Shield Icon
+            Container(
+              height: 72,
+              width: 72,
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.shield_outlined,
+                color: Colors.red,
+                size: 36,
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Title
+            Text(
+              "Block $userName?",
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Description
+            const Text(
+              "You won't see this ally anymore. You can unblock from settings later.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 32),
+            // Block Button
+            SizedBox(
+              width: double.infinity,
+              height: 54,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF3B30), // Red
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: const Text(
+                  "Block",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Cancel Button
+            SizedBox(
+              width: double.infinity,
+              height: 54,
+              child: OutlinedButton(
+                onPressed: () => Navigator.pop(context),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.black),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: const Text(
+                  "Cancel",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -131,7 +131,7 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
                 curve: Curves.easeInOut,
                 height: 36.h,
                 decoration: BoxDecoration(
-                  color: sel ? Colors.white : Colors.transparent,
+                  color: sel ? Color(0xFFF0EEFF) : Colors.transparent,
                   borderRadius: BorderRadius.circular(9.r),
                   boxShadow: sel
                       ? [

@@ -59,7 +59,7 @@ class ChatScreen extends StatelessWidget {
                               padding: EdgeInsets.only(left: 4.w),
                               child: Icon(
                                 Icons.verified,
-                                color: Colors.blue,
+                                color: Color(0xFF977CDE),
                                 size: 16.sp,
                               ),
                             ),
@@ -111,11 +111,6 @@ class ChatScreen extends StatelessWidget {
             icon: const Icon(Icons.videocam, color: Colors.purple),
             onPressed: () => Get.to(() => VideoCallScreen()),
           ),
-
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.purple),
-            onPressed: () {},
-          ),
         ],
       ),
 
@@ -134,7 +129,7 @@ class ChatScreen extends StatelessWidget {
                     onTap: () => Get.to(() => ViewProfileScreen()),
                     child: Obx(
                       () => CircleAvatar(
-                        radius: 85.r,
+                        radius: 75.r,
                         backgroundImage: NetworkImage(
                           controller.user.value.profileImageUrl,
                         ),
@@ -188,7 +183,7 @@ class ChatScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 30.h),
+                  SizedBox(height: 20.h),
 
                   // Action Buttons
                   Row(
@@ -220,9 +215,9 @@ class ChatScreen extends StatelessWidget {
                         controller.user.value.bio,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontSize: 15.5,
-                          height: 1.5,
-                          color: Colors.black87,
+                          fontSize: 12,
+                          // height: 1.5,
+                          color: Color(0xFF727272),
                         ),
                       ),
                     ),
@@ -245,7 +240,7 @@ class ChatScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: Color(0xFFFFFFFF),
                       //borderRadius: BorderRadius.circular(30),
                     ),
                     child: TextField(
@@ -295,7 +290,7 @@ class ChatScreen extends StatelessWidget {
             ),
             child: Icon(icon, color: const Color(0xFF6C30ED), size: 28.sp),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 12.h),
           Text(
             label,
             style: TextStyle(fontSize: 13.sp, color: Colors.black87),

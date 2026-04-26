@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pavann27/core/common/constants/widget/app_colors.dart';
 import 'package:pavann27/features/call/controller/call_controller.dart';
 import 'package:pavann27/features/call/model/call_model.dart';
+import 'package:pavann27/features/call/screen/call_rating_screen.dart';
 import 'package:pavann27/features/chat_started/screen/chat_started_screen.dart';
 
 class CallScreen extends StatelessWidget {
@@ -187,7 +188,11 @@ class CallScreen extends StatelessWidget {
                               })
                             : _EndCallButton(onTap: () {
                                 controller.endCall();
-                                Get.off(() => ChatStartedScreen());
+                                Get.off(() => ReviewScreen(
+                                      personName: call.allyName,
+                                      imageUrl: call.allyImage, 
+                                      duration: '12',
+                                    ));
                               }),
                   ),
                 ],

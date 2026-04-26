@@ -8,6 +8,7 @@ class TopupController extends GetxController {
   final RxString currentBalance = "45".obs;
   final RxString selectedQuickAmount = "399".obs;
   final RxString customAmount = "".obs;
+  final RxString selectedPaymentMethod = "UPI".obs;
 
   final TextEditingController amountController = TextEditingController();
 
@@ -29,8 +30,13 @@ class TopupController extends GetxController {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  void selectPaymentMethod(String method) {
+    selectedPaymentMethod.value = method;
+  }
+
   void showPaymentBottomSheet() {
     final payAmount = amountToPay;
+    final paymentMethod = selectedPaymentMethod.value;
 
     if (payAmount.isEmpty) {
       Get.snackbar("Error", "Please select or enter an amount",
@@ -38,13 +44,23 @@ class TopupController extends GetxController {
       return;
     }
 
-    Get.bottomSheet(
-      PaymentBottomSheet(amount: payAmount),
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.75),
-      enableDrag: true,
-    );
+    if (paymentMethod == "UPI") {
+      Get.bottomSheet(
+        PaymentBottomSheet(amount: payAmount),
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        barrierColor: Colors.black.withOpacity(0.75),
+        enableDrag: true,
+      );
+    } else if (paymentMethod == "Card") {
+      Get.bottomSheet(
+        CardPaymentBottomSheet(amount: payAmount),
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        barrierColor: Colors.black.withOpacity(0.75),
+        enableDrag: true,
+      );
+    }
   }
 
   @override
