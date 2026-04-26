@@ -84,7 +84,7 @@ class ChatStartedScreen extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         constraints: BoxConstraints(maxWidth: Get.width * 0.7),
         decoration: BoxDecoration(
-          color: isSender ? const Color(0xFF6A1B9A) : Colors.white,
+          color: isSender ? const Color(0xFF6C30ED) : Colors.white,
           borderRadius: BorderRadius.circular(15).copyWith(
             bottomRight: isSender ? Radius.zero : const Radius.circular(15),
             bottomLeft: isSender ? const Radius.circular(15) : Radius.zero,
@@ -124,7 +124,7 @@ class ChatStartedScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFF6A1B9A),
+                color: const Color(0xFF6C30ED),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(Icons.send, color: Colors.white),

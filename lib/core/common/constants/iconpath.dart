@@ -1,8 +1,8 @@
 class Iconpath {
-  static const String phonePe = 'assets/icons/phonepe.png';
-  static const String gPay = 'assets/icons/gpay.png';
-  static const String paytm = 'assets/icons/paytm.png';
-  static const String famPay = 'assets/icons/fampay.png';
+  // static const String phonePe = 'assets/icons/phonepe.png';
+  // static const String gPay = 'assets/icons/gpay.png';
+  // static const String paytm = 'assets/icons/paytm.png';
+  // static const String famPay = 'assets/icons/fampay.png';
 
   // Profile Icons
   static const String profileWoman1 = 'assets/icons/woman_12.jpg';

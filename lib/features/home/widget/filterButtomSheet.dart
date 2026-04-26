@@ -118,7 +118,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               height: 34.h,
                               decoration: BoxDecoration(
                                 color: selected
-                                    ? Colors.white
+                                    ? Color(0xFFF0EEFF)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10.r),
                                 border: selected
@@ -169,7 +169,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               height: 34.h,
                               decoration: BoxDecoration(
                                 color: selected
-                                    ? Colors.white
+                                    ? Color(0xFFF0EEFF)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10.r),
                                 border: selected
@@ -221,7 +221,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                               height: 34.h,
                               decoration: BoxDecoration(
                                 color: selected
-                                    ? Colors.white
+                                    ? Color(0xFFF0EEFF)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10.r),
                                 border: selected
