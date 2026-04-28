@@ -30,8 +30,8 @@ class VideoCallScreen extends StatelessWidget {
           color: isRed
               ? Colors.white
               : isActive
-                  ? AppColors.textColor
-                  : AppColors.subTextColor,
+              ? AppColors.textColor
+              : AppColors.subTextColor,
           size: 26.sp,
         ),
       ),
@@ -66,7 +66,9 @@ class VideoCallScreen extends StatelessWidget {
                         // Timer pill
                         Container(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 14.w, vertical: 8.h),
+                            horizontal: 14.w,
+                            vertical: 8.h,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color(0xFFEEEEEE),
                             borderRadius: BorderRadius.circular(20.r),
@@ -84,7 +86,9 @@ class VideoCallScreen extends StatelessWidget {
                         // Report button
                         Container(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 14.w, vertical: 8.h),
+                            horizontal: 14.w,
+                            vertical: 8.h,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color(0xFFEEEEEE),
                             borderRadius: BorderRadius.circular(20.r),
@@ -148,48 +152,48 @@ class VideoCallScreen extends StatelessWidget {
                               children: [
                                 // Outer pulse ring
                                 AnimatedContainer(
-                                  duration:
-                                      const Duration(milliseconds: 900),
+                                  duration: const Duration(milliseconds: 900),
                                   curve: Curves.easeInOut,
                                   width: connecting
                                       ? (controller.pulseLarge.value
-                                          ? 196.w
-                                          : 178.w)
+                                            ? 196.w
+                                            : 178.w)
                                       : 178.w,
                                   height: connecting
                                       ? (controller.pulseLarge.value
-                                          ? 196.w
-                                          : 178.w)
+                                            ? 196.w
+                                            : 178.w)
                                       : 178.w,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: AppColors.primaryColor
-                                          .withOpacity(0.18),
+                                      color: AppColors.primaryColor.withOpacity(
+                                        0.18,
+                                      ),
                                       width: 1.5,
                                     ),
                                   ),
                                 ),
                                 // Inner ring
                                 AnimatedContainer(
-                                  duration:
-                                      const Duration(milliseconds: 900),
+                                  duration: const Duration(milliseconds: 900),
                                   curve: Curves.easeInOut,
                                   width: connecting
                                       ? (controller.pulseLarge.value
-                                          ? 166.w
-                                          : 154.w)
+                                            ? 166.w
+                                            : 154.w)
                                       : 154.w,
                                   height: connecting
                                       ? (controller.pulseLarge.value
-                                          ? 166.w
-                                          : 154.w)
+                                            ? 166.w
+                                            : 154.w)
                                       : 154.w,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: AppColors.primaryColor
-                                          .withOpacity(0.28),
+                                      color: AppColors.primaryColor.withOpacity(
+                                        0.28,
+                                      ),
                                       width: 1,
                                     ),
                                   ),
@@ -197,8 +201,7 @@ class VideoCallScreen extends StatelessWidget {
                                 // Avatar
                                 CircleAvatar(
                                   radius: 70.r,
-                                  backgroundImage:
-                                      NetworkImage(call.allyImage),
+                                  backgroundImage: NetworkImage(call.allyImage),
                                   backgroundColor: AppColors.lightPurple,
                                 ),
                               ],
@@ -232,7 +235,9 @@ class VideoCallScreen extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
                     padding: EdgeInsets.symmetric(
-                        horizontal: 20.w, vertical: 18.h),
+                      horizontal: 20.w,
+                      vertical: 18.h,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(24.r),
@@ -296,8 +301,7 @@ class VideoCallScreen extends StatelessWidget {
                 top: 60.h + controller.previewOffset.value.dy,
                 right: 16.w - controller.previewOffset.value.dx,
                 child: GestureDetector(
-                  onPanUpdate: (d) =>
-                      controller.updatePreviewOffset(d.delta),
+                  onPanUpdate: (d) => controller.updatePreviewOffset(d.delta),
                   child: Container(
                     width: 110.w,
                     height: 148.h,
@@ -342,59 +346,60 @@ class VideoCallScreen extends StatelessWidget {
 }
 
 // ── Animated "Connecting..." dots ─────────────────────────────────────────────
-class _ConnectingDots extends StatefulWidget {
+class ConnectingDotsController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  late AnimationController _anim;
+  final dotCount = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _anim =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 700),
+        )..addListener(() {
+          dotCount.value = (_anim.value * 3).floor() % 4;
+        });
+  }
+
+  void syncAnimation(bool connecting) {
+    if (connecting) {
+      if (!_anim.isAnimating) _anim.repeat();
+    } else {
+      if (_anim.isAnimating) _anim.stop();
+    }
+  }
+
+  @override
+  void onClose() {
+    _anim.dispose();
+    super.onClose();
+  }
+}
+
+class _ConnectingDots extends StatelessWidget {
   final bool connecting;
   const _ConnectingDots({required this.connecting});
 
   @override
-  State<_ConnectingDots> createState() => _ConnectingDotsState();
-}
-
-class _ConnectingDotsState extends State<_ConnectingDots>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _anim;
-  int _dotCount = 3;
-
-  @override
-  void initState() {
-    super.initState();
-    _anim = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    )..addListener(() {
-        if (mounted) {
-          setState(() {
-            _dotCount = (_anim.value * 3).floor() % 4;
-          });
-        }
-      });
-    if (widget.connecting) _anim.repeat();
-  }
-
-  @override
-  void didUpdateWidget(_ConnectingDots old) {
-    super.didUpdateWidget(old);
-    widget.connecting ? _anim.repeat() : _anim.stop();
-  }
-
-  @override
-  void dispose() {
-    _anim.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final String text = widget.connecting
-        ? 'Connecting${'.' * _dotCount}${' ' * (3 - _dotCount)}'
-        : 'Connected';
-    return Text(
-      text,
-      style: TextStyle(
-        fontSize: 15.sp,
-        color: AppColors.subTextColor,
-        fontWeight: FontWeight.w400,
-      ),
-    );
+    final controller = Get.put(ConnectingDotsController());
+    controller.syncAnimation(connecting);
+
+    return Obx(() {
+      final count = controller.dotCount.value;
+      final String text = connecting
+          ? 'Connecting${'.' * count}${' ' * (3 - count)}'
+          : 'Connected';
+      return Text(
+        text,
+        style: TextStyle(
+          fontSize: 15.sp,
+          color: AppColors.subTextColor,
+          fontWeight: FontWeight.w400,
+        ),
+      );
+    });
   }
 }
