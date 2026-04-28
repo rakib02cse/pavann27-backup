@@ -6,6 +6,7 @@ import 'package:pavann27/app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  //hello 
 
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details);
