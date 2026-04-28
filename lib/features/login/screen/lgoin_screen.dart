@@ -5,52 +5,29 @@ import 'package:pavann27/core/common/constants/iconpath.dart';
 import 'package:pavann27/features/login/controller/lgoin_controller.dart';
 import 'dart:async';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final LoginController controller = Get.put(LoginController());
-  final PageController _pageController = PageController();
-  int currentPage = 0;
+class LoginCarouselController extends GetxController {
+  final pageController = PageController();
+  final currentPage = 0.obs;
   Timer? _autoSlideTimer;
 
-  // Add your illustration paths here
-  final List<String> illustrations = [
-    Iconpath
-        .loginLogo, // First illustration// Second illustration (can be replaced with a distinct one if available)
-    Iconpath.loginLogo2, // Third illustration
-  ];
-
-  final List<String> titles = [
-    "Someone’s here.",
-    "Talk the way you’re comfortable.",
-  ];
-
-  final List<String> subtitles = [
-    "Allies connects you with a real person to talk to — one-to-one",
-    "Anonymous. No judgement. End anytime.",
-  ];
+  final illustrations = [Iconpath.loginLogo, Iconpath.loginLogo2];
 
   @override
-  void initState() {
-    super.initState();
+  void onInit() {
+    super.onInit();
     _startAutoSlide();
   }
 
   void _startAutoSlide() {
     _autoSlideTimer?.cancel();
     _autoSlideTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (currentPage < illustrations.length - 1) {
-        currentPage++;
+      if (currentPage.value < illustrations.length - 1) {
+        currentPage.value++;
       } else {
-        currentPage = 0;
+        currentPage.value = 0;
       }
-      _pageController.animateToPage(
-        currentPage,
+      pageController.animateToPage(
+        currentPage.value,
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInOut,
       );
@@ -58,14 +35,31 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  void dispose() {
+  void onClose() {
     _autoSlideTimer?.cancel();
-    _pageController.dispose();
-    super.dispose();
+    pageController.dispose();
+    super.onClose();
   }
+}
+
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
+  static const List<String> _titles = [
+    "Someone’s here.",
+    "Talk the way you’re comfortable.",
+  ];
+
+  static const List<String> _subtitles = [
+    "Allies connects you with a real person to talk to — one-to-one",
+    "Anonymous. No judgement. End anytime.",
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final LoginController controller = Get.put(LoginController());
+    final carouselController = Get.put(LoginCarouselController());
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
@@ -80,16 +74,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 410.h,
                   child: PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: (index) {
-                      setState(() => currentPage = index);
-                    },
-                    itemCount: illustrations.length,
+                    controller: carouselController.pageController,
+                    onPageChanged: (index) =>
+                        carouselController.currentPage.value = index,
+                    itemCount: carouselController.illustrations.length,
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
                           Image.asset(
-                            illustrations[index],
+                            carouselController.illustrations[index],
                             height: 277.h,
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) =>
@@ -97,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           SizedBox(height: 20.h),
                           Text(
-                            titles[index],
+                            _titles[index],
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.bold,
@@ -107,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           SizedBox(height: 12.h),
                           Text(
-                            subtitles[index],
+                            _subtitles[index],
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: Colors.black54,
@@ -124,22 +117,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 25.h),
 
                 // Progress Indicator
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(illustrations.length, (index) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      margin: EdgeInsets.symmetric(horizontal: 4.w),
-                      width: currentPage == index ? 28.w : 6.w,
-                      height: 6.h,
-                      decoration: BoxDecoration(
-                        color: currentPage == index
-                            ? const Color(0xFF7C4DFF)
-                            : Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(17.r),
-                      ),
-                    );
-                  }),
+                Obx(
+                  () => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      carouselController.illustrations.length,
+                      (index) {
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: EdgeInsets.symmetric(horizontal: 4.w),
+                          width: carouselController.currentPage.value == index
+                              ? 28.w
+                              : 6.w,
+                          height: 6.h,
+                          decoration: BoxDecoration(
+                            color: carouselController.currentPage.value == index
+                                ? const Color(0xFF7C4DFF)
+                                : Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(17.r),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
 
                 SizedBox(height: 40.h),
