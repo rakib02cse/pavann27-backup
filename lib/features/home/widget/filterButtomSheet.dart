@@ -4,7 +4,13 @@ import 'package:get/get.dart';
 import 'package:pavann27/core/common/constants/widget/app_colors.dart';
 import 'package:pavann27/features/home/widget/ally_search.dart';
 
-class FilterBottomSheet extends StatefulWidget {
+class FilterController extends GetxController {
+  final gender = 'Any'.obs;
+  final ageRange = 'All'.obs;
+  final availability = 'All'.obs;
+}
+
+class FilterBottomSheet extends StatelessWidget {
   const FilterBottomSheet({super.key});
 
   static void show() {
@@ -15,15 +21,6 @@ class FilterBottomSheet extends StatefulWidget {
       barrierColor: Colors.black.withOpacity(0.55),
     );
   }
-
-  @override
-  State<FilterBottomSheet> createState() => _FilterBottomSheetState();
-}
-
-class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  String _gender = 'Any';
-  String _ageRange = 'All';
-  String _availability = 'All';
 
   static const List<String> _genders = ['Any', 'Female', 'Male'];
   static const List<String> _ageRanges = [
@@ -61,6 +58,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final FilterController controller = Get.put(FilterController());
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -106,43 +105,45 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       color: const Color(0xFFF3F3F5),
                       borderRadius: BorderRadius.circular(14.r),
                     ),
-                    child: Row(
-                      children: _genders.map((g) {
-                        final selected = _gender == g;
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _gender = g),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 180),
-                              curve: Curves.easeInOut,
-                              height: 34.h,
-                              decoration: BoxDecoration(
-                                color: selected
-                                    ? Color(0xFFF0EEFF)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10.r),
-                                border: selected
-                                    ? Border.all(
-                                        color: AppColors.primaryColor,
-                                        width: 1.2,
-                                      )
-                                    : null,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                g,
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
+                    child: Obx(
+                      () => Row(
+                        children: _genders.map((g) {
+                          final selected = controller.gender.value == g;
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () => controller.gender.value = g,
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 180),
+                                curve: Curves.easeInOut,
+                                height: 34.h,
+                                decoration: BoxDecoration(
                                   color: selected
-                                      ? AppColors.primaryColor
-                                      : AppColors.subTextColor,
+                                      ? const Color(0xFFF0EEFF)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: selected
+                                      ? Border.all(
+                                          color: AppColors.primaryColor,
+                                          width: 1.2,
+                                        )
+                                      : null,
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  g,
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: selected
+                                        ? AppColors.primaryColor
+                                        : AppColors.subTextColor,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }).toList(),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
@@ -157,43 +158,45 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       color: const Color(0xFFF3F3F5),
                       borderRadius: BorderRadius.circular(14.r),
                     ),
-                    child: Row(
-                      children: _ageRanges.map((a) {
-                        final selected = _ageRange == a;
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _ageRange = a),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 180),
-                              curve: Curves.easeInOut,
-                              height: 34.h,
-                              decoration: BoxDecoration(
-                                color: selected
-                                    ? Color(0xFFF0EEFF)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10.r),
-                                border: selected
-                                    ? Border.all(
-                                        color: AppColors.primaryColor,
-                                        width: 1.2,
-                                      )
-                                    : null,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                a,
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
+                    child: Obx(
+                      () => Row(
+                        children: _ageRanges.map((a) {
+                          final selected = controller.ageRange.value == a;
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () => controller.ageRange.value = a,
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 180),
+                                curve: Curves.easeInOut,
+                                height: 34.h,
+                                decoration: BoxDecoration(
                                   color: selected
-                                      ? AppColors.primaryColor
-                                      : AppColors.subTextColor,
+                                      ? const Color(0xFFF0EEFF)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: selected
+                                      ? Border.all(
+                                          color: AppColors.primaryColor,
+                                          width: 1.2,
+                                        )
+                                      : null,
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  a,
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: selected
+                                        ? AppColors.primaryColor
+                                        : AppColors.subTextColor,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }).toList(),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
@@ -208,60 +211,62 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       color: const Color(0xFFF3F3F5),
                       borderRadius: BorderRadius.circular(14.r),
                     ),
-                    child: Row(
-                      children: _availabilities.map((av) {
-                        final selected = _availability == av;
-                        final dot = _dotColor(av);
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _availability = av),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 180),
-                              curve: Curves.easeInOut,
-                              height: 34.h,
-                              decoration: BoxDecoration(
-                                color: selected
-                                    ? Color(0xFFF0EEFF)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10.r),
-                                border: selected
-                                    ? Border.all(
-                                        color: AppColors.primaryColor,
-                                        width: 1.2,
-                                      )
-                                    : null,
-                              ),
-                              alignment: Alignment.center,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (dot != Colors.transparent) ...[
-                                    Container(
-                                      width: 7.w,
-                                      height: 7.w,
-                                      decoration: BoxDecoration(
-                                        color: dot,
-                                        shape: BoxShape.circle,
+                    child: Obx(
+                      () => Row(
+                        children: _availabilities.map((av) {
+                          final selected = controller.availability.value == av;
+                          final dot = _dotColor(av);
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () => controller.availability.value = av,
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 180),
+                                curve: Curves.easeInOut,
+                                height: 34.h,
+                                decoration: BoxDecoration(
+                                  color: selected
+                                      ? const Color(0xFFF0EEFF)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: selected
+                                      ? Border.all(
+                                          color: AppColors.primaryColor,
+                                          width: 1.2,
+                                        )
+                                      : null,
+                                ),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (dot != Colors.transparent) ...[
+                                      Container(
+                                        width: 7.w,
+                                        height: 7.w,
+                                        decoration: BoxDecoration(
+                                          color: dot,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      SizedBox(width: 5.w),
+                                    ],
+                                    Text(
+                                      av,
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: selected
+                                            ? AppColors.primaryColor
+                                            : AppColors.subTextColor,
                                       ),
                                     ),
-                                    SizedBox(width: 5.w),
                                   ],
-                                  Text(
-                                    av,
-                                    style: TextStyle(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w600,
-                                      color: selected
-                                          ? AppColors.primaryColor
-                                          : AppColors.subTextColor,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }).toList(),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),

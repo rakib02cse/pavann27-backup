@@ -41,7 +41,9 @@ class CallScreen extends StatelessWidget {
                   Center(
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 20.w, vertical: 12.h),
+                        horizontal: 20.w,
+                        vertical: 12.h,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(50.r),
@@ -89,8 +91,7 @@ class CallScreen extends StatelessWidget {
                             duration: const Duration(milliseconds: 900),
                             curve: Curves.easeInOut,
                             width: controller.pulseLarge.value ? 210.w : 190.w,
-                            height:
-                                controller.pulseLarge.value ? 210.w : 190.w,
+                            height: controller.pulseLarge.value ? 210.w : 190.w,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
@@ -104,28 +105,33 @@ class CallScreen extends StatelessWidget {
                             duration: const Duration(milliseconds: 900),
                             curve: Curves.easeInOut,
                             width: controller.pulseLarge.value ? 176.w : 164.w,
-                            height:
-                                controller.pulseLarge.value ? 176.w : 164.w,
+                            height: controller.pulseLarge.value ? 176.w : 164.w,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color:
-                                    AppColors.primaryColor.withOpacity(0.25),
+                                color: AppColors.primaryColor.withOpacity(0.25),
                                 width: 1.5,
                               ),
                             ),
                           ),
                           // Avatar
                           CircleAvatar(
-                            radius: 75.r, 
-                            backgroundImage: call.allyImage.startsWith('assets/')
+                            radius: 75.r,
+                            backgroundImage:
+                                call.allyImage.startsWith('assets/')
                                 ? AssetImage(call.allyImage) as ImageProvider
                                 : NetworkImage(call.allyImage),
                             onBackgroundImageError: (exception, stackTrace) {
-                              debugPrint('Warning: Could not load image at ${call.allyImage}');
+                              debugPrint(
+                                'Warning: Could not load image at ${call.allyImage}',
+                              );
                             },
                             // The child is shown if the backgroundImage fails to load or is null
-                            child: Icon(Icons.person, size: 50.r, color: Colors.white70),
+                            child: Icon(
+                              Icons.person,
+                              size: 50.r,
+                              color: Colors.white70,
+                            ),
                             backgroundColor: AppColors.lightPurple,
                           ),
                           // Online dot
@@ -138,8 +144,10 @@ class CallScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Colors.green,
                                 shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.white, width: 3),
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 3,
+                                ),
                               ),
                             ),
                           ),
@@ -182,6 +190,24 @@ class CallScreen extends StatelessWidget {
                             onAccept: () => controller.acceptCall(),
                           )
                         : connecting
+                        ? _CancelButton(
+                            onTap: () {
+                              controller.cancelCall();
+                              Get.off(() => ChatStartedScreen());
+                            },
+                          )
+                        : _EndCallButton(
+                            onTap: () {
+                              controller.endCall();
+                              Get.off(
+                                () => ReviewScreen(
+                                  personName: call.allyName,
+                                  imageUrl: call.allyImage,
+                                  duration: '12',
+                                ),
+                              );
+                            },
+                          ),
                             ? _CancelButton(onTap: () {
                                 controller.cancelCall();
                                 Get.off(() => ChatStartedScreen());
@@ -209,10 +235,7 @@ class _RingingButtons extends StatelessWidget {
   final VoidCallback onDecline;
   final VoidCallback onAccept;
 
-  const _RingingButtons({
-    required this.onDecline,
-    required this.onAccept,
-  });
+  const _RingingButtons({required this.onDecline, required this.onAccept});
 
   @override
   Widget build(BuildContext context) {
@@ -284,66 +307,63 @@ class _RingingButtons extends StatelessWidget {
   }
 }
 
-class _StatusDots extends StatefulWidget {
-  final bool connecting;
-  const _StatusDots({required this.connecting});
-
-  @override
-  State<_StatusDots> createState() => _StatusDotsState();
-}
-
-class _StatusDotsState extends State<_StatusDots>
-    with SingleTickerProviderStateMixin {
+class StatusDotsController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   late AnimationController _anim;
-  int _dotCount = 0;
+  final dotCount = 0.obs;
 
   @override
-  void initState() {
-    super.initState();
-    _anim = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    )..addListener(() {
-        if (mounted) {
-          setState(() {
-            _dotCount = (_anim.value * 3).floor() % 4;
-          });
-        }
-      });
-    if (widget.connecting) _anim.repeat();
+  void onInit() {
+    super.onInit();
+    _anim =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 600),
+        )..addListener(() {
+          dotCount.value = (_anim.value * 3).floor() % 4;
+        });
   }
 
-  @override
-  void didUpdateWidget(_StatusDots old) {
-    super.didUpdateWidget(old);
-    if (!widget.connecting) {
-      _anim.stop();
+  void syncAnimation(bool connecting) {
+    if (connecting) {
+      if (!_anim.isAnimating) _anim.repeat();
     } else {
-      _anim.repeat();
+      if (_anim.isAnimating) _anim.stop();
     }
   }
 
   @override
-  void dispose() {
+  void onClose() {
     _anim.dispose();
-    super.dispose();
+    super.onClose();
   }
+}
+
+class _StatusDots extends StatelessWidget {
+  final bool connecting;
+  const _StatusDots({required this.connecting});
 
   @override
   Widget build(BuildContext context) {
-    final String label = widget.connecting
-        ? 'Connecting${'.' * _dotCount}${' ' * (3 - _dotCount)}'
-        : 'Connected';
+    final controller = Get.put(StatusDotsController());
+    controller.syncAnimation(connecting);
 
-    return Text(
-      label,
-      style: TextStyle(
-        fontSize: 16.sp,
-        color: AppColors.subTextColor,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.2,
-      ),
-    );
+    return Obx(() {
+      final count = controller.dotCount.value;
+      final String label = connecting
+          ? 'Connecting${'.' * count}${' ' * (3 - count)}'
+          : 'Connected';
+
+      return Text(
+        label,
+        style: TextStyle(
+          fontSize: 16.sp,
+          color: AppColors.subTextColor,
+          fontWeight: FontWeight.w400,
+          letterSpacing: 0.2,
+        ),
+      );
+    });
   }
 }
 
@@ -365,11 +385,7 @@ class _CancelButton extends StatelessWidget {
               color: const Color(0xFFFFEBEB),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Icons.close_rounded,
-              color: Colors.red,
-              size: 26.sp,
-            ),
+            child: Icon(Icons.close_rounded, color: Colors.red, size: 26.sp),
           ),
         ),
         SizedBox(height: 10.h),

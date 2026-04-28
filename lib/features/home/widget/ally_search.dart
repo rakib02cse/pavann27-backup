@@ -2,23 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pavann27/core/common/constants/widget/app_colors.dart';
-
 import 'package:pavann27/features/home/model/ally_search_model.dart';
 
-class AllySearchScreen extends StatefulWidget {
-  const AllySearchScreen({super.key});
+class AllySearchController extends GetxController {
+  final searchController = TextEditingController();
+  final gender = 'Any'.obs;
+  final ageRange = 'All'.obs;
+  final languages = <String>{'English', 'Hindi'}.obs;
+  final sortBy = 'Relevance'.obs;
 
   @override
-  State<AllySearchScreen> createState() => _AllySearchScreenState();
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
+  }
+
+  void toggleLanguage(String lang) {
+    if (languages.contains(lang)) {
+      languages.remove(lang);
+    } else {
+      languages.add(lang);
+    }
+  }
 }
 
-class _AllySearchScreenState extends State<AllySearchScreen> {
-  final TextEditingController _searchController = TextEditingController();
-
-  String _gender = 'Any';
-  String _ageRange = 'All';
-  final Set<String> _languages = {'English', 'Hindi'};
-  String _sortBy = 'Relevance';
+class AllySearchScreen extends StatelessWidget {
+  const AllySearchScreen({super.key});
 
   static const List<String> _genderOptions = ['Any', 'Female', 'Male'];
   static const List<String> _ageOptions = [
@@ -26,20 +35,20 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
     '20-25',
     '25-30',
     '30-35',
-    '35+'
+    '35+',
   ];
   static const List<String> _languageOptions = [
     'English',
     'Hindi',
     'Kannada',
     'Tamil',
-    'Telugu'
+    'Telugu',
   ];
   static const List<String> _sortOptions = [
     'Relevance',
     'Rating',
     'Sessions',
-    'Online first'
+    'Online first',
   ];
 
   final List<AllySearchModel> _allies = const [
@@ -73,7 +82,6 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
     ),
   ];
 
-  // ── Status helpers ──────────────────────────────────────────────────────────
   Color _statusBg(AllyStatus s) {
     switch (s) {
       case AllyStatus.online:
@@ -107,7 +115,6 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
     }
   }
 
-  // ── Segmented control ───────────────────────────────────────────────────────
   Widget _segmentedRow({
     required List<String> options,
     required String selected,
@@ -125,7 +132,7 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
           final bool sel = selected == opt;
           return Expanded(
             child: GestureDetector(
-              onTap: () => setState(() => onSelect(opt)),
+              onTap: () => onSelect(opt),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
                 curve: Curves.easeInOut,
@@ -139,7 +146,7 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
                             color: Colors.black.withOpacity(0.07),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
-                          )
+                          ),
                         ]
                       : null,
                   border: sel
@@ -168,13 +175,10 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
     );
   }
 
-  // ── Language chip ───────────────────────────────────────────────────────────
-  Widget _languageChip(String lang) {
-    final bool sel = _languages.contains(lang);
+  Widget _languageChip(String lang, AllySearchController controller) {
+    final bool sel = controller.languages.contains(lang);
     return GestureDetector(
-      onTap: () => setState(() {
-        sel ? _languages.remove(lang) : _languages.add(lang);
-      }),
+      onTap: () => controller.toggleLanguage(lang),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeInOut,
@@ -200,10 +204,10 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
   }
 
   // ── Sort chip ───────────────────────────────────────────────────────────────
-  Widget _sortChip(String label) {
-    final bool sel = _sortBy == label;
+  Widget _sortChip(String label, AllySearchController controller) {
+    final bool sel = controller.sortBy.value == label;
     return GestureDetector(
-      onTap: () => setState(() => _sortBy = label),
+      onTap: () => controller.sortBy.value = label,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeInOut,
@@ -228,7 +232,6 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
     );
   }
 
-  // ── Filter card ─────────────────────────────────────────────────────────────
   Widget _filterCard({required String title, required Widget child}) {
     return Container(
       width: double.infinity,
@@ -255,7 +258,6 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
     );
   }
 
-  // ── Ally tile ───────────────────────────────────────────────────────────────
   Widget _allyTile(AllySearchModel ally) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 13.h),
@@ -353,20 +355,15 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final AllySearchController controller = Get.put(AllySearchController());
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5FA),
       body: SafeArea(
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            // ── App bar ──────────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 0),
@@ -405,7 +402,6 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
 
             SliverToBoxAdapter(child: SizedBox(height: 18.h)),
 
-            // ── Search bar ───────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -419,7 +415,7 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
                           borderRadius: BorderRadius.circular(13.r),
                         ),
                         child: TextField(
-                          controller: _searchController,
+                          controller: controller.searchController,
                           textAlignVertical: TextAlignVertical.center,
                           style: TextStyle(
                             fontSize: 14.sp,
@@ -463,16 +459,17 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
 
             SliverToBoxAdapter(child: SizedBox(height: 14.h)),
 
-            // ── Gender filter ────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: _filterCard(
                   title: 'Prefer talking to',
-                  child: _segmentedRow(
-                    options: _genderOptions,
-                    selected: _gender,
-                    onSelect: (v) => _gender = v,
+                  child: Obx(
+                    () => _segmentedRow(
+                      options: _genderOptions,
+                      selected: controller.gender.value,
+                      onSelect: (v) => controller.gender.value = v,
+                    ),
                   ),
                 ),
               ),
@@ -486,10 +483,12 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: _filterCard(
                   title: 'Age range',
-                  child: _segmentedRow(
-                    options: _ageOptions,
-                    selected: _ageRange,
-                    onSelect: (v) => _ageRange = v,
+                  child: Obx(
+                    () => _segmentedRow(
+                      options: _ageOptions,
+                      selected: controller.ageRange.value,
+                      onSelect: (v) => controller.ageRange.value = v,
+                    ),
                   ),
                 ),
               ),
@@ -497,17 +496,19 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
 
             SliverToBoxAdapter(child: SizedBox(height: 10.h)),
 
-            // ── Language filter ──────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: _filterCard(
                   title: 'Language',
-                  child: Wrap(
-                    spacing: 8.w,
-                    runSpacing: 8.h,
-                    children:
-                        _languageOptions.map((l) => _languageChip(l)).toList(),
+                  child: Obx(
+                    () => Wrap(
+                      spacing: 8.w,
+                      runSpacing: 8.h,
+                      children: _languageOptions
+                          .map((l) => _languageChip(l, controller))
+                          .toList(),
+                    ),
                   ),
                 ),
               ),
@@ -515,7 +516,6 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
 
             SliverToBoxAdapter(child: SizedBox(height: 18.h)),
 
-            // ── Allies found count ───────────────────────────────────────────
             SliverToBoxAdapter(
               child: Center(
                 child: Text(
@@ -531,25 +531,27 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
 
             SliverToBoxAdapter(child: SizedBox(height: 12.h)),
 
-            // ── Sort chips ───────────────────────────────────────────────────
             SliverToBoxAdapter(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Row(
-                  children: _sortOptions
-                      .map((s) => Padding(
+                child: Obx(
+                  () => Row(
+                    children: _sortOptions
+                        .map(
+                          (s) => Padding(
                             padding: EdgeInsets.only(right: 8.w),
-                            child: _sortChip(s),
-                          ))
-                      .toList(),
+                            child: _sortChip(s, controller),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
             ),
 
             SliverToBoxAdapter(child: SizedBox(height: 18.h)),
 
-            // ── "Your Allies" heading ────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -567,7 +569,6 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
 
             SliverToBoxAdapter(child: SizedBox(height: 10.h)),
 
-            // ── Ally list ────────────────────────────────────────────────────
             SliverPadding(
               padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 32.h),
               sliver: SliverList(
@@ -587,9 +588,6 @@ class _AllySearchScreenState extends State<AllySearchScreen> {
   }
 }
 
-// ── Ally Avatar ──────────────────────────────────────────────────────────────
-// Network image with shimmer while loading, person-icon fallback on error.
-// Wrapped in a subtle purple ring to match the Figma style.
 class _AllyAvatar extends StatelessWidget {
   const _AllyAvatar({required this.name, required this.imagePath});
 
@@ -604,10 +602,7 @@ class _AllyAvatar extends StatelessWidget {
       height: size.w,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(
-          color: const Color(0xFFD5CAFF),
-          width: 2,
-        ),
+        border: Border.all(color: const Color(0xFFD5CAFF), width: 2),
       ),
       child: ClipOval(
         child: Image.network(
@@ -627,50 +622,50 @@ class _AllyAvatar extends StatelessWidget {
 }
 
 // Animated shimmer while image loads
-class _ShimmerAvatar extends StatefulWidget {
-  @override
-  State<_ShimmerAvatar> createState() => _ShimmerAvatarState();
-}
-
-class _ShimmerAvatarState extends State<_ShimmerAvatar>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ctrl;
-  late final Animation<double> _anim;
+class ShimmerController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  late final AnimationController ctrl;
+  late final Animation<double> anim;
 
   @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
+  void onInit() {
+    super.onInit();
+    ctrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     )..repeat(reverse: true);
-    _anim = Tween<double>(begin: 0.4, end: 1.0).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
-    );
+    anim = Tween<double>(
+      begin: 0.4,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: ctrl, curve: Curves.easeInOut));
   }
 
   @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
+  void onClose() {
+    ctrl.dispose();
+    super.onClose();
   }
+}
+
+class _ShimmerAvatar extends StatelessWidget {
+  const _ShimmerAvatar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ShimmerController());
     return AnimatedBuilder(
-      animation: _anim,
+      animation: controller.anim,
       builder: (_, __) => Container(
         color: Color.lerp(
           const Color(0xFFEDE8FF),
           const Color(0xFFD5CAFF),
-          _anim.value,
+          controller.anim.value,
         ),
       ),
     );
   }
 }
 
-// Soft purple circle + person icon — shown when network image fails
 class _FallbackAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
