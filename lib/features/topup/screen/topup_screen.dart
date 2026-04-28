@@ -124,13 +124,13 @@ class TopupScreen extends StatelessWidget {
                                   : Colors.grey.shade300,
                               width: isSelected ? 2 : 1,
                             ),
-                          ),
-                          child: Text(
-                            "₹${item.amount}",
-                            style: TextStyle(
-                              fontSize: 16.5,
-                              fontWeight: FontWeight.w600,
-                              color: isSelected ? Colors.white : Colors.black87,
+                            child: Text(
+                              "₹${item.amount}",
+                              style: TextStyle(
+                                fontSize: 16.5,
+                                fontWeight: FontWeight.w600,
+                                color: isSelected ? Colors.white : Colors.black87,
+                              ),
                             ),
                           ),
                         ),
@@ -752,6 +752,33 @@ class CardPaymentBottomSheet extends StatelessWidget {
 class PaymentSuccessScreen extends StatelessWidget {
   const PaymentSuccessScreen({super.key});
 
+  // Correct, stable CDN URLs for UPI app logos
+  final Map<String, String> upiLogos = {
+    "PhonePe": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.png/240px-PhonePe_Logo.png",
+    "GPay":    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png",
+    "Paytm":   "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/512px-Paytm_Logo_%28standalone%29.svg.png",
+    "FamPay":  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/FamPay_logo.svg/512px-FamPay_logo.svg.png",
+  };
+
+  // Background circle colors matching each app brand
+  final Map<String, Color> upiColors = {
+    "PhonePe": const Color(0xFF5F259F),
+    "GPay":    Colors.white,
+    "Paytm":   const Color(0xFF002970),
+    "FamPay":  const Color(0xFFFFA500),
+  };
+
+  final List<String> packs = ["39", "119", "249", "399", "699", "999"];
+
+  // The "Most Used" badge amount
+  static const String _mostUsed = "399";
+
+  @override
+  void initState() {
+    super.initState();
+    selectedAmount = widget.initialAmount;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -817,9 +844,128 @@ class PaymentSuccessScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // ── UPI App Icon ──────────────────────────────────────────────────────────
+  Widget _buildUpiIcon(String name, String logoUrl, Color bgColor) {
+    final bool isSelected = selectedAppName == name;
+
+    // For white-bg apps (GPay) use a light grey ring on unselected
+    final bool isLightBg = bgColor == Colors.white;
+
+    return GestureDetector(
+      onTap: () => setState(() => selectedAppName = name),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? bgColor
+                  : (isLightBg ? const Color(0xFFF5F5F7) : bgColor),
+              shape: BoxShape.circle,
+              border: isSelected
+                  ? Border.all(color: const Color(0xFF5B35E8), width: 2.5)
+                  : (isLightBg
+                      ? Border.all(color: Colors.grey.shade200, width: 1)
+                      : null),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: const Color(0xFF5B35E8).withOpacity(0.25),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      )
+                    ]
+                  : null,
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Image.network(
+              logoUrl,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.account_balance_wallet, size: 28, color: Colors.white),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              color: isSelected ? Colors.black87 : Colors.black54,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ====================== Card Payment Bottom Sheet ======================
+
+
+class CardPaymentBottomSheet extends StatelessWidget {
+  final String amount;
+
+  const CardPaymentBottomSheet({super.key, required this.amount});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10))),
+          const SizedBox(height: 24),
+          RichText(
+            text: TextSpan(
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+              children: [
+                const TextSpan(text: "Pay "),
+                TextSpan(text: "₹$amount", style: const TextStyle(color: Color(0xFF6236FF))),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          _buildTextField("Card Number", "Card Number"),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(child: _buildTextField("Expiry", "mm/yy")),
+              const SizedBox(width: 16),
+              Expanded(child: _buildTextField("CVV", "....")),
             ],
           ),
-        ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            height: 54,
+            child: ElevatedButton(
+              onPressed: () {
+                Get.to(() => const PaymentSuccessScreen());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryColor,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: Text("Pay ₹$amount", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ],
       ),
     );
   }

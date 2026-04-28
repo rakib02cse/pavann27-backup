@@ -208,6 +208,18 @@ class CallScreen extends StatelessWidget {
                               );
                             },
                           ),
+                            ? _CancelButton(onTap: () {
+                                controller.cancelCall();
+                                Get.off(() => ChatStartedScreen());
+                              })
+                            : _EndCallButton(onTap: () {
+                                controller.endCall();
+                                Get.off(() => ReviewScreen(
+                                      personName: call.allyName,
+                                      imageUrl: call.allyImage, 
+                                      duration: '12',
+                                    ));
+                              }),
                   ),
                 ],
               ),
